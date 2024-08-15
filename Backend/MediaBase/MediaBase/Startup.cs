@@ -1,4 +1,4 @@
-﻿namespace MovieBase
+﻿namespace MediaBase
 {
     public class Startup
     {
