@@ -9,7 +9,7 @@
         }
     },
     "profiles": {
-        "MovieBase": {
+        "MediaBase": {
             "commandName": "Project",
             "dotnetRunMessages": true,
             "launchBrowser": true,
