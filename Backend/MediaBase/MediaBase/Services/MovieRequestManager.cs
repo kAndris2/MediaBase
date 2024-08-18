@@ -10,15 +10,15 @@ namespace MediaBase.Services
         public MovieRequestManager(MoviePathProvider pathProvider, IOptions<MediaConfigs> config)
             : base(pathProvider, config.Value.MimeTypes) { }
 
-        public FileStreamResult GetStream(string title)
+        public FileStreamResult GetStream(string title, int year)
         {
-            var mediaFileInfos = pathProvider.CollectMediaInfos();
-            var mediaFileInfo = mediaFileInfos.FirstOrDefault(x => ((MovieFileInfo) x).Title == title);
+            var movieFileInfos = pathProvider.CollectMediaInfos().Select(x => (MovieFileInfo)x);
+            var movieFileInfo = movieFileInfos.FirstOrDefault(x => x.Title == title && x.Year == year);
 
-            if (mediaFileInfo == null)
-                throw new ArgumentException($"Movie not found based on the specified title! - {title}");
+            if (movieFileInfo == null)
+                throw new ArgumentException($"Movie not found based on the specified params! - Title: {title} | Year: {year}");
 
-            return GetStream(mediaFileInfo.FilePath, mediaFileInfo.Extension);
+            return GetStream(movieFileInfo.FilePath, movieFileInfo.Extension);
         }
 
         protected override IEnumerable<Movie> GetMedias(IList<IMediaFileInfo> mediaFileInfos)

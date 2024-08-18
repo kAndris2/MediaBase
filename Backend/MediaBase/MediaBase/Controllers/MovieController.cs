@@ -10,11 +10,11 @@ namespace MediaBase.Controllers
             : base(requestManager) { }
 
         [HttpGet("stream")]
-        public IActionResult GetStream([FromQuery] string title)
+        public IActionResult GetStream([FromQuery] string title, [FromQuery] int year)
         {
             try
             {
-                var fileStreamResult = ((MovieRequestManager)requestManager).GetStream(title);
+                var fileStreamResult = ((MovieRequestManager)requestManager).GetStream(title, year);
                 return fileStreamResult;
             }
             catch (Exception ex)
