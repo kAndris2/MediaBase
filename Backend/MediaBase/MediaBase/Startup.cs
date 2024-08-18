@@ -1,4 +1,7 @@
-﻿namespace MediaBase
+﻿using MediaBase.Models;
+using MediaBase.Services;
+
+namespace MediaBase
 {
     public class Startup
     {
@@ -11,19 +14,26 @@
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAll",
+            services.AddCors(
+                options => options.AddPolicy("AllowCors",
                     builder =>
                     {
                         builder.AllowAnyOrigin()
-                               .AllowAnyMethod()
-                               .AllowAnyHeader();
-                    });
-            });
+                        .WithMethods("GET")
+                        .AllowAnyHeader();
+                    }
+                )
+            );
 
             services.AddControllers();
             services.AddControllersWithViews();
+
+            services.Configure<MediaConfigs>
+                (options => Configuration.GetSection("MediaConfig").Bind(options));
+
+            services.AddScoped<MoviePathProvider>();
+            services.AddScoped<SeriesPathProvider>();
+            services.AddScoped<RequestManager>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -36,8 +46,7 @@
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseCors("AllowAll");
-            app.UseAuthorization();
+            app.UseCors("AllowCors");
 
             app.UseEndpoints(endpoints =>
             {
