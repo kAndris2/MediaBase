@@ -33,7 +33,9 @@ namespace MediaBase
 
             services.AddScoped<MoviePathProvider>();
             services.AddScoped<SeriesPathProvider>();
-            services.AddScoped<RequestManager>();
+
+            services.AddScoped<MovieRequestManager>();
+            services.AddScoped<SeriesRequestManager>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

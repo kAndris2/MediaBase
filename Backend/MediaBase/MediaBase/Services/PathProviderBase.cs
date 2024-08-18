@@ -3,7 +3,7 @@ using MediaBase.Models;
 
 namespace MediaBase.Services
 {
-    public abstract class PathProviderBase
+    public abstract class PathProviderBase : IPathProvider
     {
         protected readonly MediaConfig _config;
         private readonly string[] _supportedExtensions;

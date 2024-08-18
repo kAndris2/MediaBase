@@ -4,17 +4,17 @@ using MediaBase.Services;
 
 namespace MediaBase.Controllers
 {
-    public class MovieController : ControllerBase<Movie>
+    public class SeriesController : ControllerBase<SeriesEpisode>
     {
-        public MovieController(MovieRequestManager requestManager)
+        public SeriesController(SeriesRequestManager requestManager)
             : base(requestManager) { }
 
         [HttpGet("stream")]
-        public IActionResult GetStream([FromQuery] string title)
+        public IActionResult GetStream([FromQuery] string title, [FromQuery] int season, [FromQuery] int episode)
         {
             try
             {
-                var fileStreamResult = ((MovieRequestManager)requestManager).GetStream(title);
+                var fileStreamResult = ((SeriesRequestManager)requestManager).GetStream(title, season, episode);
                 return fileStreamResult;
             }
             catch (Exception ex)
