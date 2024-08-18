@@ -56,8 +56,7 @@ namespace MediaBase.Services
 
         private bool IsFileExtensionRelevant(string filePath)
         {
-            var extension = Path.GetExtension(filePath)
-                .Replace(".", "");
+            var extension = Path.GetExtension(filePath);
 
             return _supportedExtensions.Contains(extension);
         }
