@@ -1,4 +1,12 @@
-function App() {
+export const MediaViewer = () => {
+    return (
+        <>
+            MediaViewer
+        </>
+    );
+}
+
+/* function App() {
   return (
     <div>
       <video width="640" height="480" controls playsInline>
@@ -8,5 +16,4 @@ function App() {
     </div>
   );
 }
-
-export default App;
+*/

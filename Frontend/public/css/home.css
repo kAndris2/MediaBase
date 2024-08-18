@@ -1,0 +1,11 @@
+html {
+    background-color: #18191A;
+    color: white;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: rounded, sans-serif;
+}
