@@ -7,8 +7,8 @@ export const AppStart = () => {
   return (
     <Routes>
       <Route path={'/'} element={<Home />} />
-      <Route path={'/movie/:input'} element={<MediaViewer />} />
-      <Route path={'/series/:input'} element={<MediaViewer />} />
+      <Route path={'/movie'} element={<MediaViewer />} />
+      <Route path={'/series'} element={<MediaViewer />} />
     </Routes>
   );
 }

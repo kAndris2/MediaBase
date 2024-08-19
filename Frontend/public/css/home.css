@@ -9,3 +9,17 @@ html {
     box-sizing: border-box;
     font-family: rounded, sans-serif;
 }
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.titles {
+    display: contents;
+}
+
+.title:hover {
+    color: cornflowerblue;
+    cursor: pointer;
+}
