@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.Options;
 using MediaBase.Interfaces;
 using MediaBase.Models;
+using MediaBase.Models.Config_Models;
 
 namespace MediaBase.Services
 {
     public class SeriesPathProvider : PathProviderBase
     {
-        public SeriesPathProvider(IOptions<MediaConfigs> config)
-            : base(config.Value.MovieConfig) { }
+        public SeriesPathProvider(IOptions<MediaConfigs> config, MediaConverter mediaConverter)
+            : base(config.Value.MovieConfig, mediaConverter) { }
 
         protected override bool IsFileRelevant(string filePath)
         {

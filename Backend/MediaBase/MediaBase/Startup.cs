@@ -1,4 +1,4 @@
-﻿using MediaBase.Models;
+﻿using MediaBase.Models.Config_Models;
 using MediaBase.Services;
 
 namespace MediaBase
@@ -29,13 +29,17 @@ namespace MediaBase
             services.AddControllersWithViews();
 
             services.Configure<MediaConfigs>
-                (options => Configuration.GetSection("MediaConfig").Bind(options));
+                (options => Configuration.GetSection("MediaConfigs").Bind(options));
+            services.Configure<ConversionConfig>
+                (options => Configuration.GetSection("ConversionConfig").Bind(options));
 
             services.AddScoped<MoviePathProvider>();
             services.AddScoped<SeriesPathProvider>();
 
             services.AddScoped<MovieRequestManager>();
             services.AddScoped<SeriesRequestManager>();
+
+            services.AddScoped<MediaConverter>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

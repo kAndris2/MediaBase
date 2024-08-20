@@ -6,10 +6,12 @@ namespace MediaBase.Services
     public abstract class PathProviderBase : IPathProvider
     {
         protected readonly MediaConfig _config;
+        private readonly MediaConverter _converter;
 
-        protected PathProviderBase(MediaConfig config)
+        protected PathProviderBase(MediaConfig config, MediaConverter mediaConverter)
         {
             _config = config;
+            _converter = mediaConverter;
         }
 
         abstract protected IEnumerable<IMediaFileInfo> MakeFileInfos(string[] filePaths);
@@ -31,8 +33,7 @@ namespace MediaBase.Services
 
             if (toConvert.Count() >= 1)
             {
-                _ = new MediaConverter(_config.StreamFolder)
-                    .Convert(toConvert);
+                _ = _converter.Convert(toConvert, _config.StreamFolder);
             }
 
             return mediaInfos;
