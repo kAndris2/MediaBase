@@ -23,11 +23,6 @@ namespace MediaBase.Services
 
         protected FileStreamResult GetStream(string filePath, string extension)
         {
-            /*
-            if (!_mimeTypes.ContainsKey(extension))
-                throw new InvalidOperationException($"Unsupported extension! - {extension}");
-            */
-
             var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             
             return new FileStreamResult(fileStream, "video/mp4")

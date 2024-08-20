@@ -7,8 +7,8 @@ namespace MediaBase.Services
 {
     public class MoviePathProvider : PathProviderBase
     {
-        public MoviePathProvider(IOptions<MediaConfigs> config, MediaConverter mediaConverter)
-            : base(config.Value.MovieConfig, mediaConverter) { }
+        public MoviePathProvider(IOptions<MediaConfigs> config, MediaConverter mediaConverter, ILogger<MoviePathProvider> logger)
+            : base(config.Value.MovieConfig, mediaConverter, logger) { }
 
         protected override bool IsFileRelevant(string filePath)
         {
