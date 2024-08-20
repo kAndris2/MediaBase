@@ -1,4 +1,5 @@
-﻿using Xabe.FFmpeg;
+﻿using Microsoft.Extensions.Options;
+using Xabe.FFmpeg;
 using MediaBase.Interfaces;
 using MediaBase.Models.ConfigModels;
 
@@ -8,9 +9,9 @@ namespace MediaBase.Services
     {
         private readonly ConversionConfig _config;
 
-        public MediaConverter(ConversionConfig config)
+        public MediaConverter(IOptions<ConversionConfig> config)
         {
-            _config = config;
+            _config = config.Value;
         }
 
         public async Task Convert(IEnumerable<IMediaFileInfo> mediaFileInfos, string outputFolder)
