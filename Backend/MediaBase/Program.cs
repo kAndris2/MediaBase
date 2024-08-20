@@ -1,12 +1,19 @@
+using NLog;
+using NLog.Web;
+
 namespace MediaBase
 {
     public static class Program
     {
         public static void Main(string[] args)
         {
+            var logger = LogManager.Setup()
+                .LoadConfigurationFromFile("appsettings")
+                .GetCurrentClassLogger();
 
             try
             {
+                logger.Debug("init main");
 
                 CreateHostBuilder(args)
                     .Build()
@@ -14,7 +21,7 @@ namespace MediaBase
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Stopped program because of exception! - Ex.: {ex.Message}");
+                logger.Error(ex, "Stopped program because of exception");
             }
         }
 
@@ -23,10 +30,12 @@ namespace MediaBase
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseNLog();
                 })
             .ConfigureLogging(logging =>
             {
                 logging.ClearProviders();
-            });
+            })
+            .UseNLog();
     }
 }
