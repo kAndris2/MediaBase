@@ -1,6 +1,6 @@
 ﻿using Xabe.FFmpeg;
 using MediaBase.Interfaces;
-using MediaBase.Models.Config_Models;
+using MediaBase.Models.ConfigModels;
 
 namespace MediaBase.Services
 {

@@ -1,4 +1,4 @@
-﻿using MediaBase.Models.Config_Models;
+﻿using MediaBase.Models.ConfigModels;
 using MediaBase.Services;
 
 namespace MediaBase

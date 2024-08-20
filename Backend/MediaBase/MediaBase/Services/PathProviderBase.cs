@@ -1,5 +1,5 @@
 ﻿using MediaBase.Interfaces;
-using MediaBase.Models;
+using MediaBase.Models.ConfigModels;
 
 namespace MediaBase.Services
 {

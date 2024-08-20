@@ -1,4 +1,4 @@
-﻿namespace MediaBase.Models
+﻿namespace MediaBase.Models.ConfigModels
 {
     public class MediaConfig
     {
