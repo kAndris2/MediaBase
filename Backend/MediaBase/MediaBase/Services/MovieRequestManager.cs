@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MediaBase.Models;
 using MediaBase.Interfaces;
 
@@ -7,8 +6,8 @@ namespace MediaBase.Services
 {
     public class MovieRequestManager : RequestManagerBase<Movie>
     {
-        public MovieRequestManager(MoviePathProvider pathProvider, IOptions<MediaConfigs> config)
-            : base(pathProvider, config.Value.MimeTypes) { }
+        public MovieRequestManager(MoviePathProvider pathProvider)
+            : base(pathProvider) { }
 
         public FileStreamResult GetStream(string title, int year)
         {

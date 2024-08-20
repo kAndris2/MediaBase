@@ -6,12 +6,10 @@ namespace MediaBase.Services
     public abstract class PathProviderBase : IPathProvider
     {
         protected readonly MediaConfig _config;
-        private readonly string[] _supportedExtensions;
 
-        protected PathProviderBase(MediaConfig config, IDictionary<string, string> mimeTypes)
+        protected PathProviderBase(MediaConfig config)
         {
             _config = config;
-            _supportedExtensions = mimeTypes.Keys.ToArray();
         }
 
         abstract protected IEnumerable<IMediaFileInfo> MakeFileInfos(string[] filePaths);
@@ -85,7 +83,7 @@ namespace MediaBase.Services
         {
             var extension = Path.GetExtension(filePath);
 
-            return _supportedExtensions.Contains(extension);
+            return _config.SupportedExtensions.Contains(extension);
         }
     }
 }

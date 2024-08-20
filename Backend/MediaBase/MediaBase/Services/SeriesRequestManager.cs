@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using MediaBase.Interfaces;
 using MediaBase.Models;
 
@@ -7,8 +6,8 @@ namespace MediaBase.Services
 {
     public class SeriesRequestManager : RequestManagerBase<SeriesEpisode>
     {
-        public SeriesRequestManager(SeriesPathProvider pathProvider, IOptions<MediaConfigs> config)
-            : base(pathProvider, config.Value.MimeTypes) { }
+        public SeriesRequestManager(SeriesPathProvider pathProvider)
+            : base(pathProvider) { }
 
         public FileStreamResult GetStream(string title, int season, int episode)
         {

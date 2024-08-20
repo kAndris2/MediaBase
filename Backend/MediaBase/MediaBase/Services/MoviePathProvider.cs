@@ -7,7 +7,7 @@ namespace MediaBase.Services
     public class MoviePathProvider : PathProviderBase
     {
         public MoviePathProvider(IOptions<MediaConfigs> config)
-            : base(config.Value.MovieConfig, config.Value.MimeTypes) { }
+            : base(config.Value.MovieConfig) { }
 
         protected override bool IsFileRelevant(string filePath)
         {

@@ -6,12 +6,10 @@ namespace MediaBase.Services
     public abstract class RequestManagerBase<T> : IRequestManager<T>
     {
         protected readonly IPathProvider pathProvider;
-        private readonly IDictionary<string, string> _mimeTypes;
 
-        protected RequestManagerBase(IPathProvider pathProvider, IDictionary<string, string> mimeTypes)
+        protected RequestManagerBase(IPathProvider pathProvider)
         {
             this.pathProvider = pathProvider;
-            _mimeTypes = mimeTypes;
         }
 
         abstract protected IEnumerable<T> GetMedias(IEnumerable<IMediaFileInfo> mediaFileInfos);
@@ -25,13 +23,14 @@ namespace MediaBase.Services
 
         protected FileStreamResult GetStream(string filePath, string extension)
         {
+            /*
             if (!_mimeTypes.ContainsKey(extension))
                 throw new InvalidOperationException($"Unsupported extension! - {extension}");
+            */
 
-            var mimeType = $"video/{_mimeTypes[extension]}";
             var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             
-            return new FileStreamResult(fileStream, mimeType)
+            return new FileStreamResult(fileStream, "video/mp4")
             {
                 EnableRangeProcessing = true
             };
