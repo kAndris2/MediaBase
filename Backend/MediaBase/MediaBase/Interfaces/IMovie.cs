@@ -4,5 +4,6 @@
     {
         string Title { get; }
         int Year { get; }
+        bool IsStreamReady { get; }
     }
 }

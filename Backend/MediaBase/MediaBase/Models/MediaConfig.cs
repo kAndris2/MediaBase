@@ -2,6 +2,7 @@
 {
     public class MediaConfig
     {
-        public string[] Folders { get; set; }
+        public string[] SourceFolders { get; set; }
+        public string StreamFolder { get; set; }
     }
 }

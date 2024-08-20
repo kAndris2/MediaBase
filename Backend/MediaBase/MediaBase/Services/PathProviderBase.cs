@@ -17,25 +17,52 @@ namespace MediaBase.Services
         abstract protected IEnumerable<IMediaFileInfo> MakeFileInfos(string[] filePaths);
         abstract protected bool IsFileRelevant(string filePath);
 
-        public List<IMediaFileInfo> CollectMediaInfos()
+        public IEnumerable<IMediaFileInfo> CollectMediaInfos()
+        {
+            var mediaInfosFromStream = CollectMediaInfos(_config.StreamFolder).ToList();
+            var mediaInfosFromSrc = CollectMediaInfos(_config.SourceFolders);
+            var toConvert = mediaInfosFromSrc.Except(mediaInfosFromStream).ToList();
+            var mediaInfos = new List<IMediaFileInfo>();
+
+            foreach (var mediaFileInfo in mediaInfosFromSrc)
+            {
+                var mI = mediaInfosFromStream.FirstOrDefault(x => x.Equals(mediaFileInfo));
+
+                mediaInfos.Add(mI != null ? mI : mediaFileInfo);
+            }
+
+            if (toConvert.Count() >= 1)
+            {
+                _ = new MediaConverter(_config.StreamFolder)
+                    .Convert(toConvert);
+            }
+
+            return mediaInfos;
+        }
+
+        private IEnumerable<IMediaFileInfo> CollectMediaInfos(string[] folders)
         {
             var mediaInfos = new List<IMediaFileInfo>();
 
-            foreach (var folder in _config.Folders)
+            foreach (var folder in folders)
             {
-                if (!Directory.Exists(folder)) continue;
-
-                var mInfos = CollectMediaInfosRecursive(folder)
-                    .Where(x => IsFileExtensionRelevant(x.FilePath))
-                    .Where(x => IsFileRelevant(x.FilePath));
-
+                var mInfos = CollectMediaInfos(folder);
                 mediaInfos.AddRange(mInfos);
             }
 
             return mediaInfos;
         }
 
-        private List<IMediaFileInfo> CollectMediaInfosRecursive(string path)
+        private IEnumerable<IMediaFileInfo> CollectMediaInfos(string folder)
+        {
+            if (!Directory.Exists(folder)) return Array.Empty<IMediaFileInfo>();
+
+            return CollectMediaInfosRecursive(folder)
+                .Where(mI => IsFileExtensionRelevant(mI.FilePath))
+                .Where(mI => IsFileRelevant(mI.FilePath));
+        }
+
+        private IEnumerable<IMediaFileInfo> CollectMediaInfosRecursive(string path)
         {
             var mediaInfos = new List<IMediaFileInfo>();
             var filePaths = Directory.GetFiles(path);

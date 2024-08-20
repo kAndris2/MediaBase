@@ -14,7 +14,7 @@ namespace MediaBase.Services
             _mimeTypes = mimeTypes;
         }
 
-        abstract protected IEnumerable<T> GetMedias(IList<IMediaFileInfo> mediaFileInfos);
+        abstract protected IEnumerable<T> GetMedias(IEnumerable<IMediaFileInfo> mediaFileInfos);
 
         public IEnumerable<T> GetTitles()
         {

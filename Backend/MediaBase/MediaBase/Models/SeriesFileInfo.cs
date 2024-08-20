@@ -9,6 +9,7 @@ namespace MediaBase.Models
         public string FileName => Path.GetFileName(FilePath);
         public string ParentFolder => Directory.GetParent(FilePath).Name;
         public string Extension => Path.GetExtension(FilePath);
+        public bool IsStreamReady => Extension.Equals(".mp4");
         public string Title => GetTitleOfSeries();
         public int Season { get; set; }
         public int Episode { get; set; }
@@ -21,7 +22,22 @@ namespace MediaBase.Models
 
         public SeriesEpisode Get()
         {
-            return new SeriesEpisode(Title, Season, Episode);
+            return new SeriesEpisode(Title, Season, Episode, IsStreamReady);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            var seriesFileInfo = (SeriesFileInfo)obj;
+
+            return seriesFileInfo.Title == Title && seriesFileInfo.Season == Season && seriesFileInfo.Episode == Episode;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Title, Season, Episode);
         }
 
         private void GuessSeasonAndEpisode()

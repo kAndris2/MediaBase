@@ -2,6 +2,6 @@
 {
     public interface IPathProvider
     {
-        List<IMediaFileInfo> CollectMediaInfos();
+        IEnumerable<IMediaFileInfo> CollectMediaInfos();
     }
 }

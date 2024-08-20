@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc;
 using MediaBase.Models;
 using MediaBase.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 
 namespace MediaBase.Services
 {
@@ -21,7 +21,7 @@ namespace MediaBase.Services
             return GetStream(movieFileInfo.FilePath, movieFileInfo.Extension);
         }
 
-        protected override IEnumerable<Movie> GetMedias(IList<IMediaFileInfo> mediaFileInfos)
+        protected override IEnumerable<Movie> GetMedias(IEnumerable<IMediaFileInfo> mediaFileInfos)
         {
             return mediaFileInfos.Select(x => ((MovieFileInfo) x).Get());
         }

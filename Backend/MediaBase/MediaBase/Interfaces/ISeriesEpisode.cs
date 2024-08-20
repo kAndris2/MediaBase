@@ -5,5 +5,6 @@
         string Title { get; }
         int Season { get; }
         int Episode { get; }
+        bool IsStreamReady { get; }
     }
 }

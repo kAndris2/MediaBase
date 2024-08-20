@@ -21,7 +21,7 @@ namespace MediaBase.Services
             return GetStream(seriesFileInfo.FilePath, seriesFileInfo.Extension);
         }
 
-        protected override IEnumerable<SeriesEpisode> GetMedias(IList<IMediaFileInfo> mediaFileInfos)
+        protected override IEnumerable<SeriesEpisode> GetMedias(IEnumerable<IMediaFileInfo> mediaFileInfos)
         {
             return mediaFileInfos.Select(x => ((SeriesFileInfo)x).Get());
         }

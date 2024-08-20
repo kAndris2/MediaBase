@@ -9,6 +9,7 @@ namespace MediaBase.Models
         public string FileName => Path.GetFileName(FilePath);
         public string ParentFolder => Directory.GetParent(FilePath).Name;
         public string Extension => Path.GetExtension(FilePath);
+        public bool IsStreamReady => Extension.Equals(".mp4");
         public string Title => GetTitle();
         public int Year => GetYear();
 
@@ -19,7 +20,22 @@ namespace MediaBase.Models
 
         public Movie Get()
         {
-            return new Movie(Title, Year);
+            return new Movie(Title, Year, IsStreamReady);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || GetType() != obj.GetType()) 
+                return false;
+
+            var movieFileInfo = (MovieFileInfo)obj;
+
+            return movieFileInfo.Title == Title && movieFileInfo.Year == Year;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Title, Year);
         }
 
         private string GetTitle()
