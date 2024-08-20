@@ -6,12 +6,15 @@ namespace MediaBase.Services
     public abstract class PathProviderBase : IPathProvider
     {
         protected readonly MediaConfig _config;
+        protected readonly ILogger<IPathProvider> _logger;
+
         private readonly MediaConverter _converter;
 
-        protected PathProviderBase(MediaConfig config, MediaConverter mediaConverter)
+        protected PathProviderBase(MediaConfig config, MediaConverter mediaConverter, ILogger<IPathProvider> logger)
         {
             _config = config;
             _converter = mediaConverter;
+            _logger = logger;
         }
 
         abstract protected IEnumerable<IMediaFileInfo> MakeFileInfos(string[] filePaths);
@@ -54,7 +57,11 @@ namespace MediaBase.Services
 
         private IEnumerable<IMediaFileInfo> CollectMediaInfos(string folder)
         {
-            if (!Directory.Exists(folder)) return Array.Empty<IMediaFileInfo>();
+            if (!Directory.Exists(folder))
+            {
+                _logger.LogWarning($"The specified folder does not exist! - {folder}");
+                return Array.Empty<IMediaFileInfo>();
+            }
 
             return CollectMediaInfosRecursive(folder)
                 .Where(mI => IsFileExtensionRelevant(mI.FilePath))

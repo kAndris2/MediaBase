@@ -6,8 +6,8 @@ namespace MediaBase.Controllers
 {
     public class SeriesController : ControllerBase<SeriesEpisode>
     {
-        public SeriesController(SeriesRequestManager requestManager)
-            : base(requestManager) { }
+        public SeriesController(SeriesRequestManager requestManager, ILogger<SeriesController> logger)
+            : base(requestManager, logger) { }
 
         [HttpGet("stream")]
         public IActionResult GetStream([FromQuery] string title, [FromQuery] int season, [FromQuery] int episode)
@@ -19,7 +19,8 @@ namespace MediaBase.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                logger.LogError(ex.Message);
+                return BadRequest("An error occurred while trying to get the stream!");
             }
         }
     }
