@@ -40,6 +40,8 @@ namespace MediaBase
             services.AddScoped<SeriesRequestManager>();
 
             services.AddScoped<MediaConverter>();
+
+            services.AddHostedService<AutomaticConversionManager>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

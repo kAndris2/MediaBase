@@ -5,26 +5,37 @@ namespace MediaBase.Services
 {
     public abstract class PathProviderBase : IPathProvider
     {
-        protected readonly MediaConfig _config;
         protected readonly ILogger<IPathProvider> _logger;
+        protected readonly MediaConfig _config;
 
-        private readonly MediaConverter _converter;
+        private readonly string _streamFolderPath;
 
-        protected PathProviderBase(MediaConfig config, MediaConverter mediaConverter, ILogger<IPathProvider> logger)
+        protected PathProviderBase(ILogger<IPathProvider> logger, MediaConfig config, string streamFolderPath)
         {
             _config = config;
-            _converter = mediaConverter;
             _logger = logger;
+            _streamFolderPath = streamFolderPath;
         }
 
         abstract protected IEnumerable<IMediaFileInfo> MakeFileInfos(string[] filePaths);
         abstract protected bool IsFileRelevant(string filePath);
 
+        public IEnumerable<IMediaFileInfo> GetMediasToConvert()
+        {
+            if (!CheckConfiguration()) return new List<IMediaFileInfo>();
+
+            var mediaInfosFromStream = CollectMediaInfos(_streamFolderPath);
+            var mediaInfosFromSrc = CollectMediaInfos(_config.SourceFolders);
+
+            return mediaInfosFromSrc.Except(mediaInfosFromStream);
+        }
+
         public IEnumerable<IMediaFileInfo> CollectMediaInfos()
         {
-            var mediaInfosFromStream = CollectMediaInfos(_config.StreamFolder).ToList();
+            if (!CheckConfiguration()) return new List<IMediaFileInfo>();
+
+            var mediaInfosFromStream = CollectMediaInfos(_streamFolderPath);
             var mediaInfosFromSrc = CollectMediaInfos(_config.SourceFolders);
-            var toConvert = mediaInfosFromSrc.Except(mediaInfosFromStream).ToList();
             var mediaInfos = new List<IMediaFileInfo>();
 
             foreach (var mediaFileInfo in mediaInfosFromSrc)
@@ -32,11 +43,6 @@ namespace MediaBase.Services
                 var mI = mediaInfosFromStream.FirstOrDefault(x => x.Equals(mediaFileInfo));
 
                 mediaInfos.Add(mI != null ? mI : mediaFileInfo);
-            }
-
-            if (toConvert.Count() >= 1)
-            {
-                _ = _converter.Convert(toConvert, _config.StreamFolder);
             }
 
             return mediaInfos;
@@ -92,6 +98,29 @@ namespace MediaBase.Services
             var extension = Path.GetExtension(filePath);
 
             return _config.SupportedExtensions.Contains(extension);
+        }
+
+        private bool CheckConfiguration()
+        {
+            var errorMessage = string.Empty;
+            var faultyField = string.Empty;
+
+            if (string.IsNullOrEmpty(_streamFolderPath))
+                faultyField = "StreamFolder";
+
+            else if (_config.SourceFolders == null)
+                faultyField = "SourceFolders";
+
+            else if (_config.SupportedExtensions == null)
+                faultyField = "SupportedExtensions";
+
+            if (!string.IsNullOrEmpty(faultyField))
+            {
+                errorMessage = $"The '{faultyField}' cannot be empty! Please check the configuration!";
+                _logger.LogError(errorMessage);
+            }
+
+            return string.IsNullOrEmpty(errorMessage);
         }
     }
 }

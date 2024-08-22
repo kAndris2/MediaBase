@@ -21,7 +21,7 @@ namespace MediaBase
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Stopped program because of exception");
+                logger.Error($"Stopped program because of exception! Ex.: {ex.Message}");
             }
         }
 

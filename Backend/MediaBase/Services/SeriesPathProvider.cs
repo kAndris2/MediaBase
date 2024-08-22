@@ -7,8 +7,8 @@ namespace MediaBase.Services
 {
     public class SeriesPathProvider : PathProviderBase
     {
-        public SeriesPathProvider(IOptions<MediaConfigs> config, MediaConverter mediaConverter, ILogger<SeriesPathProvider> logger)
-            : base(config.Value.MovieConfig, mediaConverter, logger) { }
+        public SeriesPathProvider(ILogger<SeriesPathProvider> logger, IOptions<MediaConfigs> mediaConfig, IOptions<ConversionConfig> conversionConfig)
+            : base(logger, mediaConfig.Value.MovieConfig, conversionConfig.Value.StreamFolder) { }
 
         protected override bool IsFileRelevant(string filePath)
         {
