@@ -16,8 +16,14 @@ namespace MediaBase.Services
             _logger = logger;
         }
 
-        public async Task Convert(IEnumerable<IMediaFileInfo> mediaFileInfos, string outputFolder)
+        public async Task Convert(IEnumerable<IMediaFileInfo> mediaFileInfos)
         {
+            if (!CheckConfiguration(out string errorMessage))
+            {
+                _logger.LogError($"{errorMessage} Please check the configuration!");
+                return;
+            }
+
             _logger.LogInformation($"The conversion is about to start. Files included: {mediaFileInfos.Count()}");
 
             FFmpeg.SetExecutablesPath(_config.ConverterPath);
@@ -27,7 +33,7 @@ namespace MediaBase.Services
             foreach (var mediaFileInfo in mediaFileInfos)
             {
                 tasks.Add(
-                    Task.Run(() => ConvertToMp4(mediaFileInfo, outputFolder))
+                    Task.Run(() => ConvertToMp4(mediaFileInfo))
                 );
             }
 
@@ -36,13 +42,13 @@ namespace MediaBase.Services
             _logger.LogInformation("The conversion has been ended successfully.");
         }
 
-        private async Task ConvertToMp4(IMediaFileInfo mediaFileInfo, string outputFolder)
+        private async Task ConvertToMp4(IMediaFileInfo mediaFileInfo)
         {
             _logger.LogInformation($"Starting to convert: {mediaFileInfo.FileName}");
 
             var mediaInfo = await FFmpeg.GetMediaInfo(mediaFileInfo.FilePath);
             var fileName = mediaFileInfo.FileName.Replace(mediaFileInfo.Extension, string.Empty);
-            var outputFilePath = $"{outputFolder}\\{mediaFileInfo.ParentFolder}\\{fileName}.mp4";
+            var outputFilePath = $"{_config.StreamFolder}\\{mediaFileInfo.ParentFolder}\\{fileName}.mp4";
 
             var conversion = FFmpeg.Conversions.New()
                 .AddStream(mediaInfo.VideoStreams.FirstOrDefault()?.SetCodec(VideoCodec.h264))
@@ -52,6 +58,25 @@ namespace MediaBase.Services
             await conversion.Start();
 
             _logger.LogInformation($"The conversion of {mediaFileInfo.FileName} completed successfully.");
+        }
+
+        private bool CheckConfiguration(out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            if (string.IsNullOrEmpty(_config.ConverterPath))
+            {
+                errorMessage = "The 'ConverterPath' cannot be empty!";
+                return false;
+            }
+
+            else if (string.IsNullOrEmpty(_config.StreamFolder))
+            {
+                errorMessage = "The 'StreamFolder' cannot be empty!";
+                return false;
+            }
+
+            return string.IsNullOrEmpty(errorMessage);
         }
     }
 }

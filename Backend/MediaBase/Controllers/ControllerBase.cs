@@ -5,7 +5,7 @@ namespace MediaBase.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ControllerBase<T> : Controller
+    public abstract class ControllerBase<T> : Controller
     {
         protected readonly ILogger<ControllerBase> logger;
         protected readonly IRequestManager<T> requestManager;

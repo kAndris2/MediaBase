@@ -21,6 +21,11 @@ namespace MediaBase.Services
             return GetMedias(mediaFileInfos);
         }
 
+        public IEnumerable<IMediaFileInfo> GetMediasToConvert()
+        {
+            return pathProvider.GetMediasToConvert();
+        }
+
         protected FileStreamResult GetStream(string filePath, string extension)
         {
             var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
